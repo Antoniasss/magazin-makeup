@@ -35,7 +35,7 @@ public:
             : Caracteristici("FaceBrand", 10, "Beige"), foundation(f), primer(p), concealer(c), powder(pw), contour(ct) {}
 
     void ShowProductInfo() {
-        Caracteristici::ShowProductInfo();  // Call base class member function
+        Caracteristici::ShowProductInfo();
         cout << "Foundation: " << foundation << "\n";
         cout << "Primer: " << primer << "\n";
         cout << "Concealer: " << concealer << "\n";
@@ -62,7 +62,7 @@ public:
             : Caracteristici("EyeBrand", 5, "Black"), mascara(m), eyeliner(e), eyeshadow(es) {}
 
     void ShowProductInfo() {
-        Caracteristici::ShowProductInfo();  // Call base class member function
+        Caracteristici::ShowProductInfo();
         cout << "Mascara: " << mascara << "\n";
         cout << "Eyeliner: " << eyeliner << "\n";
         cout << "Eyeshadow: " << eyeshadow << "\n";
@@ -87,7 +87,7 @@ public:
     Lips(const Lips& other) : Caracteristici(other), gloss(other.gloss), liner(other.liner), lipstick(other.lipstick) {}
 
     void ShowProductInfo() {
-        Caracteristici::ShowProductInfo();  // Call base class member function
+        Caracteristici::ShowProductInfo();
         cout << "Gloss: " << gloss << "\n";
         cout << "Liner: " << liner << "\n";
         cout << "Lipstick: " << lipstick << "\n";
