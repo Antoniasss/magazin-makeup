@@ -1,130 +1,279 @@
 #include <iostream>
-#include <string>
+#include<vector>
+#include<memory>
+#include<map>
+#include "Client.h"
+#include "Basket.h"
+#include "Dior.h"
+#include "Fenty.h"
+#include "Huda.h"
+#include "Parfum.h"
+#include "Parfum_info.h"
+#include "Tip.h"
 
 using namespace std;
 
-class Caracteristici {
-public:
-    string brand;
+/*
+class Basket;
+
+class Parfum_info;
+
+class Client {
+protected :
+    std:: string name;
+    int age;
+public :
+    //default constructor
+    Client (std::string _name = "", double a = 0) : name(_name), age(a) {};
+    virtual ~Client() {}
+    virtual void citire(){ std::cin>>name>>age;}
+    virtual std::wstring afisare () const {return L" ";}
+};
+// Clasa abstracta de baza pentru produsele din magazin
+class Magazin {
+public :
+    std::wstring tip_produs;
+    double pret;
     int stoc;
-    string culoare;
 
-    Caracteristici(string b, int s, string c) : brand(b), stoc(s), culoare(c) {}
+    //constructor
+    Magazin(std::wstring _tip_produs = L"", double p = 0, int s = 0) : tip_produs(_tip_produs), pret(p), stoc(s) {}
 
-    Caracteristici(const Caracteristici& other) : brand(other.brand), stoc(other.stoc), culoare(other.culoare) {}
+    //destructor virtual pt polimorfism
+    virtual ~Magazin() {}
 
-    void ShowProductInfo() {
-        cout << "Brand: " << brand << endl;
-        cout << "Stock: " << stoc << endl;
-        cout << "Color: " << culoare << endl;
+//funtie virtuala pura pentru a aplica promotii
+    virtual void promotii(std::wstring tip_produs)=0;
+
+    virtual std::wstring afisare() const = 0;
+
+//fct virtuala pt clonare
+    virtual std::shared_ptr<Magazin> clone() const = 0;
+};
+class Dior : public Magazin
+{
+public :
+    std::wstring produs;
+    std::wstring culoare;
+
+    Dior( const std::wstring& produs_, const std::wstring& culoare_ ) : produs(produs_),culoare(culoare_){}
+
+    //funtie de suprascriere pt a afisa informatiile din produsele dior
+    std::wstring  afisare() const override {return produs + L" " + culoare + L" " ; }
+
+    void promotii(std::wstring tip_produs) override {
+        std::cout << "Promotii pentru produsele Dior." << std::endl;
+        if (tip_produs == L"lips") {
+            try {
+                if (pret / 2 < 0) {
+                    throw std::runtime_error("Negative price after promotion");
+                }
+                pret /= 2;
+                std::wcout << L"Reducere la jumatate pentru produsul Dior: " << produs << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << "Error: " << e.what() << std::endl;
+            }
+        }
     }
-
-    friend ostream& operator<<(ostream& os, const Caracteristici& obj) {
-        os << "Brand: " << obj.brand << "\n";
-        os << "Stock: " << obj.stoc << "\n";
-        os << "Color: " << obj.culoare << "\n";
-        return os;
+    //fct de suprascriere pt clonarea obiectelor dior
+    std::shared_ptr<Magazin> clone() const override {
+        return std::make_shared<Dior>(*this);
     }
 };
+class Fenty: public Magazin
+{
+public :
+    std::wstring produs;
+    std::wstring culoare;
+    Fenty( const std::wstring& produs_, const std::wstring& culoare_ ) : produs(produs_),culoare(culoare_){}
+    std::wstring  afisare() const override {return produs + L" " + culoare + L" " ; }
+    void promotii(std::wstring tip_produs) override {
+        std::cout << "Promotii pentru produsele Fenty." << std::endl;
+        if (tip_produs == L"eyes") {
+            try {
+                if (pret / 2 < 0) {
+                    throw std::runtime_error("Negative price after promotion");
+                }
+                pret /= 2;
+                std::wcout << L"Reducere la jumatate pentru produsul Fenty: " << produs << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << "Error: " << e.what() << std::endl;
+            }
+        }
+    }
+    std::shared_ptr<Magazin> clone() const override {
+        return std::make_shared<Fenty>(*this);
+    }
 
-class Face : public Caracteristici {
+};
+class Huda : public Magazin
+{ public:
+    std::wstring produs;
+    std::wstring culoare;
+    Huda( const std::wstring& produs_, const std::wstring& culoare_ ) : produs(produs_),culoare(culoare_){}
+    std::wstring  afisare() const override {return produs + L" " + culoare + L" " ; }
+    void promotii(std::wstring tip_produs) override {
+        std::cout << "Promotii pentru produsele Huda." << std::endl;
+        if (tip_produs == L"lips") {
+            try {
+                if (pret / 2 < 0) {
+                    throw std::runtime_error("Negative price after promotion");
+                }
+                pret /= 2;
+                std::wcout << L"Reducere la jumatate pentru produsul Huda: " << produs << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << "Error: " << e.what() << std::endl;
+            }
+        }
+    }
+
+    std::shared_ptr<Magazin> clone() const override {
+        return std::make_shared<Huda>(*this);
+    }
+
+};
+class Parfum : public Magazin{
 public:
-    string foundation, primer, concealer, powder, contour;
-
-    Face(string f, string p, string c, string pw, string ct)
-            : Caracteristici("FaceBrand", 10, "Beige"), foundation(f), primer(p), concealer(c), powder(pw), contour(ct) {}
-
-    void ShowProductInfo() {
-        Caracteristici::ShowProductInfo();
-        cout << "Foundation: " << foundation << "\n";
-        cout << "Primer: " << primer << "\n";
-        cout << "Concealer: " << concealer << "\n";
-        cout << "Powder: " << powder << "\n";
-        cout << "Contour: " << contour << "\n";
+    std::wstring name;
+    std::wstring scent;
+    Parfum(const std::wstring& name_, const std::wstring& scent_, std::wstring _tip_produs =L"", double p = 0, int s = 0) : Magazin(_tip_produs, p, s), name{name_}, scent{scent_}{}
+    friend class Parfum_info;
+    std::wstring afisare() const override { return name + L" " + scent + L" "; }
+    void promotii(std::wstring tip_produs) override {
+        std::cout << " Nu estista Promotii pentru parfumuri." << std::endl;
     }
 
-    friend ostream& operator<<(ostream& os, const Face& obj) {
-        os << static_cast<const Caracteristici&>(obj);
-        os << "Foundation: " << obj.foundation << "\n";
-        os << "Primer: " << obj.primer << "\n";
-        os << "Concealer: " << obj.concealer << "\n";
-        os << "Powder: " << obj.powder << "\n";
-        os << "Contour: " << obj.contour << "\n";
-        return os;
+    std::shared_ptr<Magazin> clone() const override {
+        return std::make_shared<Parfum>(*this);
     }
 };
-
-class Eye : public Caracteristici {
+//clasa statica pt informatiile despre parfumuri
+class Parfum_info {
 public:
-    string mascara, eyeliner, eyeshadow;
-
-    Eye(string m, string e, string es)
-            : Caracteristici("EyeBrand", 5, "Black"), mascara(m), eyeliner(e), eyeshadow(es) {}
-
-    void ShowProductInfo() {
-        Caracteristici::ShowProductInfo();
-        cout << "Mascara: " << mascara << "\n";
-        cout << "Eyeliner: " << eyeliner << "\n";
-        cout << "Eyeshadow: " << eyeshadow << "\n";
-    }
-
-    friend ostream& operator<<(ostream& os, const Eye& obj) {
-        os << static_cast<const Caracteristici&>(obj);
-        os << "Mascara: " << obj.mascara << "\n";
-        os << "Eyeliner: " << obj.eyeliner << "\n";
-        os << "Eyeshadow: " << obj.eyeshadow << "\n";
-        return os;
+    // Functie pt a verifica daca 2 parfumuri au acelasi miros
+    static bool haveSameScent(const std::shared_ptr<Parfum>& perfume1, const std::shared_ptr<Parfum>& perfume2) {
+        return perfume1->scent == perfume2->scent;
     }
 };
-
-class Lips : public Caracteristici {
+//clasa statica pentru a determina tipul produselor(fata,ochi,buze)
+class Tip {
 public:
-    string gloss, liner, lipstick;
+    //functie pentru a det tipul folosind dynamic_pointer_cast
+    static void getProductType(const shared_ptr<Magazin>& product)
+    {
+        if (auto diorProduct = dynamic_pointer_cast<Dior>(product)) {
+            wcout << L"Dior Product: " << diorProduct->tip_produs << std::endl;
 
-    Lips(string g, string l, string ls)
-            : Caracteristici("LipsBrand", 8, "Red"), gloss(g), liner(l), lipstick(ls) {}
+        } else if (auto fentyProduct = dynamic_pointer_cast<Fenty>(product)) {
+            wcout << L"Fenty Product: " << fentyProduct->tip_produs << std::endl;
 
-    Lips(const Lips& other) : Caracteristici(other), gloss(other.gloss), liner(other.liner), lipstick(other.lipstick) {}
+        } else if (auto hudaProduct = dynamic_pointer_cast<Huda>(product)) {
+            wcout << L"Huda Product: " << hudaProduct->tip_produs << std::endl;
 
-    void ShowProductInfo() {
-        Caracteristici::ShowProductInfo();
-        cout << "Gloss: " << gloss << "\n";
-        cout << "Liner: " << liner << "\n";
-        cout << "Lipstick: " << lipstick << "\n";
-    }
-
-    ~Lips() {
-        cout << "Destructor  brand: " << brand << endl;
-    }
-
-    friend ostream& operator<<(ostream& os, const Lips& obj) {
-        os << static_cast<const Caracteristici&>(obj);
-        os << "Gloss: " << obj.gloss << "\n";
-        os << "Liner: " << obj.liner << "\n";
-        os << "Lipstick: " << obj.lipstick << "\n";
-        return os;
+        } else {
+            wcerr << L"Unknown Product Type" << std::endl;
+        }
     }
 };
+//cos de cumparaturi
+class Basket {
+public:
+    vector<shared_ptr<Magazin>> cumparaturi;
+//functie pentru a adauga produse in cos
+    void adaugaProdus(shared_ptr<Magazin>produs)
+    {
+        cumparaturi.push_back(produs);
+    }
 
-int main() {
-    Face faceProduct("FoundationA", "PrimerA", "Beige", "PowderA", "ContourA");
-    Eye eyeProduct("MascaraB", "EyelinerB", "EyeshadowB");
-    Lips lipsProduct("GlossC", "LinerC", "Red");
+    void afisareCos() const {
+        for (const auto& cumparat : cumparaturi) {
+            std::wcout << cumparat->afisare() << L" - Pret: " << cumparat->pret << std::endl;
+        }
+    }
 
-    cout << "detalii prod fata:\n";
-    faceProduct.ShowProductInfo();
+    void aplicarePromotii() {
+        for (const auto& cumparat : cumparaturi) {
+            cumparat->promotii(cumparat->tip_produs);
+        }
+    }
+};*/
 
-    cout << "\n detalii prod ochi:\n";
-    eyeProduct.ShowProductInfo();
+int main()
+//vector de clienti
+{
+    vector<Client *> c;
+    //map pt a asocia clientii cu cosurile lor de cumparaturi
+    map<Client *, Basket> cosuri;
+    int nr;
+    cout << "dati un nr de clienti: ";
+    cin >> nr;
+    for (int i = 0; i < nr; i++) {
+        double a;
+        string n;
+        cout << "Nume: ";
+        cin >> n;
+        cout << "Varsta: ";
+        cin >> a;
+        c.push_back(new Client(n, a));
+        cosuri[c.back()] = Basket();
+    }
+    auto sp1 = make_shared<Dior>(L" ruj", L"roz");
+    auto sp2 = make_shared<Dior>(L" ruj", L"mov");
+    auto sp3 = make_shared<Fenty>(L" mascara", L"roz");
+    auto sp4 = make_shared<Huda>(L" ruj", L"roz");
+    auto sp5 = std::make_shared<Parfum>(L"Parfum1", L"Scent1");
+    auto sp6 = std::make_shared<Parfum>(L"Parfum2", L"Scent2");
 
-    cout << "\n detalii prod buze:\n";
-    lipsProduct.ShowProductInfo();
+    sp1->tip_produs = L"lips";
+    sp2->tip_produs = L"eyes";
+    sp3->tip_produs = L"eyes";
+    sp4->tip_produs = L"lips";
+    sp5->tip_produs = L"scent";
+    sp6->tip_produs = L"scent";
 
-    Lips lipsProduct1("GlossC", "LinerC", "Red");
-    Lips lipsProduct2 = lipsProduct1;
+    sp1->pret = 50.0;
+    sp2->pret = 30.0;
+    sp3->pret = 40.0;
+    sp4->pret = 55.0;
+    sp5->pret = 75.0;
+    sp6->pret = 80.0;
 
-    cout << "\nbuze Copy:\n";
-    lipsProduct2.ShowProductInfo();
+    //adauga produsele in cosul unui client
+
+    cosuri[c[0]].adaugaProdus(sp1);
+    cosuri[c[0]].adaugaProdus(sp2);
+    cosuri[c[0]].adaugaProdus(sp3);
+    cosuri[c[0]].adaugaProdus(sp5);
+    cosuri[c[0]].adaugaProdus(sp6);
+
+    wcout << L"Cosul pentru " << c[0]->afisare() << L"contine:" << endl;
+    cosuri[c[0]].afisareCos();
+
+    cosuri[c[0]].aplicarePromotii();
+
+    wcout << L"Cosul dupa aplicarea promotiilor:" << endl;
+    cosuri[c[0]].afisareCos();
+
+    for (auto client: c) {
+        delete client;
+    }
+    if (Parfum_info::haveSameScent(std::dynamic_pointer_cast<Parfum>(sp5), std::dynamic_pointer_cast<Parfum>(sp6))) {
+        std::cout << "The two perfumes have the same scent." << std::endl;
+    } else {
+        std::cout << "The two perfumes have different scents." << std::endl;
+    }
+    auto clonedDior = sp1->clone();
+    std::wcout << L"Cloned Dior: " << clonedDior->afisare() << std::endl;
+
+    auto clonedFenty = sp3->clone();
+    std::wcout << L"Cloned Fenty: " << clonedFenty->afisare() << std::endl;
+
+    auto clonedHuda = sp4->clone();
+    std::wcout << L"Cloned Huda: " << clonedHuda->afisare() << std::endl;
+
+    auto clonedParfum = sp5->clone();
+    std::wcout << L"Cloned Parfum: " << clonedParfum->afisare() << std::endl;
+
 
     return 0;
 }

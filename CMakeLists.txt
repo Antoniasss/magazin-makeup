@@ -90,7 +90,16 @@ endfunction()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp
+        Basket.cpp
+        Client.cpp
+        Dior.cpp
+        Fenty.cpp
+        Huda.cpp
+        Magazin.cpp
+        Parfum.cpp
+        Parfum_info.cpp
+        Tip.cpp)
 
 ###############################################################################
 
